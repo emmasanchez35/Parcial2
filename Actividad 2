@@ -1,4 +1,4 @@
-mysql> use emmasanchez35$default;
+/*mysql> use emmasanchez35$default;
 Database changed
 mysql> CREATE TABLE Artículos1(
     -> Artículos TINYTEXT
@@ -152,7 +152,7 @@ mysql> INSERT INTO Ordenes (id_cliente, id_Orden, Estado_Destino, Costo)
 Query OK, 8 rows affected (0.01 sec)
 Records: 8  Duplicates: 0  Warnings: 0
 
-mysql> CREATE TABLE Ejercicio3 (
+mysql> CREATE TABLE Ejercicio (
     ->     id_cliente INT,
     ->     id_orden INT,
     ->     estado_destino VARCHAR (30),
@@ -160,7 +160,7 @@ mysql> CREATE TABLE Ejercicio3 (
     -> );
 Query OK, 0 rows affected (0.03 sec)
 
-mysql> INSERT INTO Ejercicio3(id_cliente,id_orden,estado_destino,costo) VALUES 
+mysql> INSERT INTO Ejercicio(id_cliente,id_orden,estado_destino,costo) VALUES 
     -> (1001, 1, 'JAL', '$987'),
     -> (1001, 2, 'CDMX', '$400'),
     -> (1001, 3, 'CDMX', '$545'),
@@ -173,10 +173,10 @@ Query OK, 8 rows affected (0.01 sec)
 Records: 8  Duplicates: 0  Warnings: 0
 
 mysql> SELECT id_cliente,id_orden,estado_destino,costo
-    -> FROM Ejercicio3
+    -> FROM Ejercicio
     -> WHERE estado_destino = 'CDMX'
     -> AND id_cliente IN (
-    ->     SELECT id_cliente FROM Ejercicio3 WHERE estado_destino = 'JAL'
+    ->     SELECT id_cliente FROM Ejercicio WHERE estado_destino = 'JAL'
     -> );
 +------------+----------+----------------+-------+
 | id_cliente | id_orden | estado_destino | costo |
@@ -186,3 +186,4 @@ mysql> SELECT id_cliente,id_orden,estado_destino,costo
 |       1001 |        4 | CDMX           | $321  |
 +------------+----------+----------------+-------+
 3 rows in set (0.00 sec)
+mysql> */
