@@ -57,6 +57,19 @@ mysql> SELECT * FROM Artículos2;
 mysql> SELECT * from Articulos1 left outer join Articulos2 on Articulos1.Artículo = Articulos2.Articulo
     -> union 
     -> SELECT * from Articulos1 right outer join Articulos2 on Articulos2.Articulo = Articulos1.Artículo;
++-----------+-------------+
+| Articulo1 | Articulo2   |
++-----------+-------------+
+| Azucar    | Azucar      |
+| Pan       | Pan         |
+| jugo      | NULL        |
+| Refresco  | NULL        |
+| Harina    | NULL        |
+| NULL      | Mantequilla |
+| NULL      | Queso       |
+| NULL      | Manzana     |
++-----------+-------------+
+8 rows in set (0.00 sec)
 
 mysql> CREATE TABLE Empleados (
     -> id_empleado INT PRIMARY KEY,
@@ -139,62 +152,15 @@ mysql> INSERT INTO Ordenes (id_cliente, id_Orden, Estado_Destino, Costo)
 Query OK, 8 rows affected (0.01 sec)
 Records: 8  Duplicates: 0  Warnings: 0
 
-mysql> SELECT DISTINCT
-    -> c1.Id_cliente, c2.Id_Orden, c2.Estado_Destino, c2.Costo
-    -> FROM
-    -> Ordenes c1
-    -> INNER JOIN
-    -> Ordenes c2
-    -> ON c1.Id_cliente = c2.Id cliente
-    -> WHERE
-    -> c1.Estado_Destino = 'JAL'
-    -> AND c2.Estado_Destino = 'CDMX'
-    -> ORDER BY c1.Id_cliente, c2.Id_Orden;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cliente
-WHERE
-c1.Estado_Destino = 'JAL'
-AND c2.Estado_Destino = 'CDMX'
-ORDER BY ' at line 7
-mysql> SELECT DISTINCT
-    -> c1.Id_cliente,c2.Id_Orden,c2.Estado_Destino,c2.Costo
-    -> FROM
-    -> Ordenes c1
-    -> INNER JOIN
-    -> Ordenes c2
-    -> ON c1.Id_cliente =c2.Id cliente
-    -> WHERE
-    -> c1.Estado_Destino ='JAL'
-    -> AND c2.Estado_Destino ='CDMX'
-    -> ORDER BY c1.Id_cliente,c2.Id_Orden;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cliente
-WHERE
-c1.Estado_Destino ='JAL'
-AND c2.Estado_Destino ='CDMX'
-ORDER BY c1' at line 7
-mysql> SELECT DISTINCT
-    ->  c1.Id_cliente,c2.Id_Orden,c2.Estado_Destino,c2.Costo
-    -> FROM
-    ->   Ordenes c1
-    -> INNER JOIN
-    ->   Ordenes c2
-    -> ON c1.Id_cliente =c2.Id cliente
-    -> WHERE
-    ->  c1.Estado_Destino ='JAL'
-    ->  AND c2.Estado_Destino ='CDMX'
-    -> ORDER BY c1.Id_cliente,c2.Id_Orden;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cliente
-WHERE
- c1.Estado_Destino ='JAL'
- AND c2.Estado_Destino ='CDMX'
-ORDER BY ' at line 7
-mysql> CREATE TABLE ejercicio3 (
+mysql> CREATE TABLE Ejercicio3 (
     ->     id_cliente INT,
     ->     id_orden INT,
     ->     estado_destino VARCHAR (30),
     ->     costo VARCHAR(10) 
     -> );
 Query OK, 0 rows affected (0.03 sec)
-mysql> INSERT INTO ejercicio3(id_cliente,id_orden,estado_destino,costo) VALUES 
+
+mysql> INSERT INTO Ejercicio3(id_cliente,id_orden,estado_destino,costo) VALUES 
     -> (1001, 1, 'JAL', '$987'),
     -> (1001, 2, 'CDMX', '$400'),
     -> (1001, 3, 'CDMX', '$545'),
@@ -205,11 +171,12 @@ mysql> INSERT INTO ejercicio3(id_cliente,id_orden,estado_destino,costo) VALUES
     -> (5005, 8, 'CDMX', '$567');
 Query OK, 8 rows affected (0.01 sec)
 Records: 8  Duplicates: 0  Warnings: 0
+
 mysql> SELECT id_cliente,id_orden,estado_destino,costo
-    -> FROM ejercicio3
+    -> FROM Ejercicio3
     -> WHERE estado_destino = 'CDMX'
     -> AND id_cliente IN (
-    ->     SELECT id_cliente FROM ejercicio3 WHERE estado_destino = 'JAL'
+    ->     SELECT id_cliente FROM Ejercicio3 WHERE estado_destino = 'JAL'
     -> );
 +------------+----------+----------------+-------+
 | id_cliente | id_orden | estado_destino | costo |
