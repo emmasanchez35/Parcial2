@@ -1,0 +1,241 @@
+mysql> use emmasanchez35$default;
+Database changed
+mysql> CREATE TABLE Artículos1(
+    -> Artículos TINYTEXT
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE Artículos2(
+    -> Artículos TINYTEXT
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO Artículos1
+    ->     VALUES
+    ->     ('Azucar'),
+    ->     ('Pan'),
+    ->     ('jugo'),
+    ->     ('Refresco'),
+    ->     ('Harina');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Artículos2 
+    ->     VALUES
+    ->     ('Azucar'),
+    ->     ('Pan'),
+    ->     ('Mantequilla'),
+    ->     ('Queso'),
+    ->     ('Manzana');
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Artículos1;
++------------+
+| Artículos  |
++------------+
+| Azucar     |
+| Pan        |
+| jugo       |
+| Refresco   |
+| Harina     |
++------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Artículos2;
++-------------+
+| Artículos   |
++-------------+
+| Azucar      |
+| Pan         |
+| Mantequilla |
+| Queso       |
+| Manzana     |
++-------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * from articulosuno left outer join articulosdos on articulosuno.Artículo = articulosdos.Articulo
+    -> union 
+    -> SELECT * from articulosuno right outer join articulosdos on articulosdos.Articulo = articulosuno.Artículo;
+ERROR 1146 (42S02): Table 'emmasanchez35$default.articulosuno' doesn't exist
+mysql> SELECT * from articulos1 left outer join articulos2 on articulos1.Artículo = articulos2.Articulo
+    -> union 
+    -> SELECT * from articulos1 right outer join articulos2 on articulos2.Articulo = articulos1.Artículo;
+ERROR 1use emmasanchez35$default;SELECT * from articulos1 left outer join articulos2 on articulos1.Artículo = articulos2.Articulo
+Database changed
+    -> union 
+    -> SELECT * from articulos1 right outer join articulos2 on articulos2.Articulo = articulos1.Artículo;
+ERROR 1146 (42S02): Table 'emmasanchez35$default.articulos1' doesn't exist
+mysql> SELECT * from Articulos1 left outer join Articulos2 on Articulos1.Artículo = Articulos2.Articulo
+    -> union 
+    -> SELECT * from Articulos1 right outer join Articulos2 on Articulos2.Articulo = Articulos1.Artículo;
+ERROR 1054 (42S22): Unknown column 'Articulos1.Artículo' in 'on clause'
+mysql> SELECT * FROM Articulos1
+    -> LEFT OUTER JOIN Articulos2
+    -> ON Articulos1.Artículo = Articulos2.Artículo
+    -> UNION
+    -> SELECT * FROM Articulos1
+    -> RIGHT OUTER JOIN Articulos2
+    -> ON Articulos1.Artículo = Articulos2.Artículo;
+ERROR 1054 (42S22): Unknown column 'Articulos1.Artículo' in 'on clause'
+mysql> CREATE TABLE Empleados (
+    -> id_empleado INT PRIMARY KEY,
+    -> id gerente INT NULL,
+    -> Puesto VARCHAR (50)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'gerente INT NULL,
+Puesto VARCHAR (50)
+)' at line 3
+mysql> CREATE TABLE Empleados (
+    -> id_empleado INT PRIMARY KEY,
+    -> id_gerente INT NULL,
+    -> Puesto VARCHAR (50)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO Empleados (id_empleado, id_gerente, Puesto)
+    -> VALUES
+    -> (1001, NULL, 'Presidente'),
+    -> (2002, 1001, 'Director'),
+    -> (3003, 1001,'Gerente'),
+    -> (4004, 2002, 'Ingeniero'),
+    -> (5005, 2002, 'Contador'),
+    -> (6006, 2002, 'Administrador');
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> WITH RECURSIVE Organigrama AS (
+    -> SELECT
+    ->   Id_empleado, Id_gerente, Puesto,
+    ->   0 AS Nivel
+    -> FROM
+    ->   Empleados
+    -> WHERE
+    ->   Id_gerente IS NULL
+    -> UNION ALL
+    -> SELECT
+    ->   e.Id_empleado, e.Id_gerente, e.Puesto, o.Nivel + 1 AS Nivel
+    -> FROM
+    ->   Empleados e
+    -> INNER JOIN
+    ->   Organigrama o
+    -> ON e.Id_gerente = o.Id_empleado
+    -> )
+    -> SELECT
+    ->   Id_empleado, Id_gerente, Puesto, Nivel
+    -> FROM
+    ->   Organigrama
+    -> ORDER BY Nivel, Id_empleado;
++-------------+------------+---------------+-------+
+| Id_empleado | Id_gerente | Puesto        | Nivel |
++-------------+------------+---------------+-------+
+|        1001 |       NULL | Presidente    |     0 |
+|        2002 |       1001 | Director      |     1 |
+|        3003 |       1001 | Gerente       |     1 |
+|        4004 |       2002 | Ingeniero     |     2 |
+|        5005 |       2002 | Contador      |     2 |
+|        6006 |       2002 | Administrador |     2 |
++-------------+------------+---------------+-------+
+6 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Ordenes(
+    -> id_cliente INT,
+    -> id_Orden INT,
+    -> Estado_Destino VARCHAR(50),
+    -> Costo DECIMAL(10, 2)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO Ordenes (id_cliente, id_Orden, Estado_Destino, Costo)
+    -> VALUES
+    -> (1001, 1,'JAL', 987),
+    -> (1001, 2,'CDMX', 400),
+    -> (1001, 3,'CDMX', 545),
+    -> (1001, 4,'CDMX', 321),
+    -> (2002, 5,'MTY', 324),
+    -> (3003, 6,'JAL', 931),
+    -> (4004, 7,'JAL', 876),
+    -> (5005, 8,'CDMX', 567);
+Query OK, 8 rows affected (0.01 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> SELECT DISTINCT
+    -> c1.Id_cliente, c2.Id_Orden, c2.Estado_Destino, c2.Costo
+    -> FROM
+    -> Ordenes c1
+    -> INNER JOIN
+    -> Ordenes c2
+    -> ON c1.Id_cliente = c2.Id cliente
+    -> WHERE
+    -> c1.Estado_Destino = 'JAL'
+    -> AND c2.Estado_Destino = 'CDMX'
+    -> ORDER BY c1.Id_cliente, c2.Id_Orden;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cliente
+WHERE
+c1.Estado_Destino = 'JAL'
+AND c2.Estado_Destino = 'CDMX'
+ORDER BY ' at line 7
+mysql> SELECT DISTINCT
+    -> c1.Id_cliente,c2.Id_Orden,c2.Estado_Destino,c2.Costo
+    -> FROM
+    -> Ordenes c1
+    -> INNER JOIN
+    -> Ordenes c2
+    -> ON c1.Id_cliente =c2.Id cliente
+    -> WHERE
+    -> c1.Estado_Destino ='JAL'
+    -> AND c2.Estado_Destino ='CDMX'
+    -> ORDER BY c1.Id_cliente,c2.Id_Orden;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cliente
+WHERE
+c1.Estado_Destino ='JAL'
+AND c2.Estado_Destino ='CDMX'
+ORDER BY c1' at line 7
+mysql> SELECT DISTINCT
+    ->  c1.Id_cliente,c2.Id_Orden,c2.Estado_Destino,c2.Costo
+    -> FROM
+    ->   Ordenes c1
+    -> INNER JOIN
+    ->   Ordenes c2
+    -> ON c1.Id_cliente =c2.Id cliente
+    -> WHERE
+    ->  c1.Estado_Destino ='JAL'
+    ->  AND c2.Estado_Destino ='CDMX'
+    -> ORDER BY c1.Id_cliente,c2.Id_Orden;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cliente
+WHERE
+ c1.Estado_Destino ='JAL'
+ AND c2.Estado_Destino ='CDMX'
+ORDER BY ' at line 7
+mysql> CREATE TABLE ejercicio3 (
+    ->     id_cliente INT,
+    ->     id_orden INT,
+    ->     estado_destino VARCHAR (30),
+    ->     costo VARCHAR(10) 
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+mysql> INSERT INTO ejercicio3(id_cliente,id_orden,estado_destino,costo) VALUES 
+    -> (1001, 1, 'JAL', '$987'),
+    -> (1001, 2, 'CDMX', '$400'),
+    -> (1001, 3, 'CDMX', '$545'),
+    -> (1001, 4, 'CDMX', '$321'),
+    -> (2002, 5, 'MTY', '$324'),
+    -> (3003, 6, 'JAL', '$931'),
+    -> (4004, 7, 'JAL', '$876'),
+    -> (5005, 8, 'CDMX', '$567');
+Query OK, 8 rows affected (0.01 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+mysql> SELECT id_cliente,id_orden,estado_destino,costo
+    -> FROM ejercicio3
+    -> WHERE estado_destino = 'CDMX'
+    -> AND id_cliente IN (
+    ->     SELECT id_cliente FROM ejercicio3 WHERE estado_destino = 'JAL'
+    -> );
++------------+----------+----------------+-------+
+| id_cliente | id_orden | estado_destino | costo |
++------------+----------+----------------+-------+
+|       1001 |        2 | CDMX           | $400  |
+|       1001 |        3 | CDMX           | $545  |
+|       1001 |        4 | CDMX           | $321  |
++------------+----------+----------------+-------+
+3 rows in set (0.00 sec)
