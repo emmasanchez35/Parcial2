@@ -54,30 +54,10 @@ mysql> SELECT * FROM Artículos2;
 +-------------+
 5 rows in set (0.00 sec)
 
-mysql> SELECT * from articulosuno left outer join articulosdos on articulosuno.Artículo = articulosdos.Articulo
-    -> union 
-    -> SELECT * from articulosuno right outer join articulosdos on articulosdos.Articulo = articulosuno.Artículo;
-ERROR 1146 (42S02): Table 'emmasanchez35$default.articulosuno' doesn't exist
-mysql> SELECT * from articulos1 left outer join articulos2 on articulos1.Artículo = articulos2.Articulo
-    -> union 
-    -> SELECT * from articulos1 right outer join articulos2 on articulos2.Articulo = articulos1.Artículo;
-ERROR 1use emmasanchez35$default;SELECT * from articulos1 left outer join articulos2 on articulos1.Artículo = articulos2.Articulo
-Database changed
-    -> union 
-    -> SELECT * from articulos1 right outer join articulos2 on articulos2.Articulo = articulos1.Artículo;
-ERROR 1146 (42S02): Table 'emmasanchez35$default.articulos1' doesn't exist
 mysql> SELECT * from Articulos1 left outer join Articulos2 on Articulos1.Artículo = Articulos2.Articulo
     -> union 
     -> SELECT * from Articulos1 right outer join Articulos2 on Articulos2.Articulo = Articulos1.Artículo;
-ERROR 1054 (42S22): Unknown column 'Articulos1.Artículo' in 'on clause'
-mysql> SELECT * FROM Articulos1
-    -> LEFT OUTER JOIN Articulos2
-    -> ON Articulos1.Artículo = Articulos2.Artículo
-    -> UNION
-    -> SELECT * FROM Articulos1
-    -> RIGHT OUTER JOIN Articulos2
-    -> ON Articulos1.Artículo = Articulos2.Artículo;
-ERROR 1054 (42S22): Unknown column 'Articulos1.Artículo' in 'on clause'
+
 mysql> CREATE TABLE Empleados (
     -> id_empleado INT PRIMARY KEY,
     -> id gerente INT NULL,
