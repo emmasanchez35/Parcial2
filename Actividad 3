@@ -8,6 +8,77 @@ owners.
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 mysql> use emmasanchez35$default;
 Database changed
+mysql> CREATE TABLE PermutacionesLibre (
+    ->     Elemento CHAR(1)
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+mysql> INSERT INTO PermutacionesLibre (Elemento)
+    -> VALUES
+    -> ('A'),
+    -> ('B'),
+    -> ('C');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+mysql> SELECT 
+    ->     CONCAT(T1.Elemento, ',', T2.Elemento, ',', T3.Elemento) AS Permutacion
+    -> FROM 
+    ->     PermutacionesLibre T1
+    -> JOIN 
+    ->     PermutacionesLibre T2 ON T1.Elemento <> T2.Elemento
+    -> JOIN 
+    ->     PermutacionesLibre T3 ON T1.Elemento <> T3.Elemento AND T2.Elemento <> T3.Elemento
+    -> ORDER BY 
+    ->     Permutacion;
++-------------+
+| Permutacion |
++-------------+
+| A,B,C       |
+| A,C,B       |
+| B,A,C       |
+| B,C,A       |
+| C,A,B       |
+| C,B,A       |
++-------------+
+6 rows in set (0.00 sec)
+mysql> CREATE TABLE Promedio (
+    ->     Desarrollo VARCHAR(50),
+    ->     Terminacion DATE 
+    -> );
+ERROR 1050 (42S01): Table 'Promedio' already exists
+mysql> INSERT INTO Promedio (Desarrollo, Terminacion)
+    -> VALUES
+    -> ('RestAPI', '2024-06-01'),
+    -> ('RestAPI', '2024-06-14'),
+    -> ('RestAPI', '2024-06-15'),
+    -> ('Web', '2024-06-01'),
+    -> ('Web', '2024-06-02'),
+    -> ('Web', '2024-06-19'),
+    -> ('App', '2024-06-01'),
+    -> ('App', '2024-06-15'),
+    -> ('App', '2024-06-30');
+Query OK, 9 rows affected (0.00 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+mysql> SELECT
+    ->     t1.Desarrollo,
+    ->     ROUND(AVG(DATEDIFF(t1.Terminacion, t2.Terminacion))) AS Promedio
+    -> FROM
+    ->     PromedioDias t1
+    -> LEFT JOIN
+    ->     PromedioDias t2
+    -> ON
+    ->     t1.Desarrollo = t2.Desarrollo AND t1.Terminacion > t2.Terminacion
+    -> WHERE
+    ->     t2.Terminacion IS NOT NULL
+    -> GROUP BY
+    ->     t1.Desarrollo;
++------------+----------+
+| Desarrollo | Promedio |
++------------+----------+
+| RestAPI    |        7 |
+| Web        |        9 |
+| App        |       14 |
++------------+----------+
+3 rows in set (0.01 sec)
 mysql> CREATE TABLE Inventario (
     ->     Fecha DATE,
     ->     Ajuste INT
