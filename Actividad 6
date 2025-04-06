@@ -1,0 +1,73 @@
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9103379
+Server version: 8.0.40 Source distribution
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+mysql> use emmasanchez35$default;
+Database changed
+mysql> CREATE TABLE Desagrupacion (
+    ->     Producto VARCHAR(50),
+    ->     Cantidad INT
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+mysql> INSERT INTO Desagrupacion (Producto, Cantidad)
+    -> VALUES
+    -> ('Lápiz', 3),
+    -> ('Borrador', 4),
+    -> ('Cuaderno', 2);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+mysql> SELECT Producto, 1 AS Cantidad
+    -> FROM Desagrupacion
+    -> WHERE Producto = 'Lápiz' AND Cantidad >= 1
+    -> UNION ALL
+    -> SELECT Producto, 1 AS Cantidad
+    -> FROM Desagrupacion
+    -> WHERE Producto = 'Lápiz' AND Cantidad >= 2
+    -> UNION ALL
+    -> SELECT Producto, 1 AS Cantidad
+    -> FROM Desagrupacion
+    -> WHERE Producto = 'Lápiz' AND Cantidad >= 3
+    -> UNION ALL
+    -> SELECT Producto, 1 AS Cantidad
+    -> FROM Desagrupacion
+    -> WHERE Producto = 'Borrador' AND Cantidad >= 1
+    -> UNION ALL
+    -> SELECT Producto, 1 AS Cantidad
+    -> FROM Desagrupacion
+    -> WHERE Producto = 'Borrador' AND Cantidad >= 2
+    -> UNION ALL
+    -> SELECT Producto, 1 AS Cantidad
+    -> FROM Desagrupacion
+    -> WHERE Producto = 'Borrador' AND Cantidad >= 3
+    -> UNION ALL
+    -> SELECT Producto, 1 AS Cantidad
+    -> FROM Desagrupacion
+    -> WHERE Producto = 'Borrador' AND Cantidad >= 4
+    -> UNION ALL
+    -> SELECT Producto, 1 AS Cantidad
+    -> FROM Desagrupacion
+    -> WHERE Producto = 'Cuaderno' AND Cantidad >= 1
+    -> UNION ALL
+    -> SELECT Producto, 1 AS Cantidad
+    -> FROM Desagrupacion
+    -> WHERE Producto = 'Cuaderno' AND Cantidad >= 2;
++----------+----------+
+| Producto | Cantidad |
++----------+----------+
+| Lápiz    |        1 |
+| Lápiz    |        1 |
+| Lápiz    |        1 |
+| Borrador |        1 |
+| Borrador |        1 |
+| Borrador |        1 |
+| Borrador |        1 |
+| Cuaderno |        1 |
+| Cuaderno |        1 |
++----------+----------+
+9 rows in set (0.00 sec)
