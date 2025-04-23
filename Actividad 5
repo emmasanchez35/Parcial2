@@ -1,1 +1,100 @@
-
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 26214082
+Server version: 8.0.40 Source distribution
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+mysql> CREATE TABLE procesos (
+    ->     Flujo VARCHAR(50),
+    ->     Paso INT,
+    ->     Estado VARCHAR(20)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+mysql> INSERT INTO procesos (Flujo, Paso, Estado) VALUES 
+    -> ('Alpha', 1, 'Error'),
+    -> ('Alpha', 2, 'Finalizado'),
+    -> ('Alpha', 3, 'Corriendo'),
+    -> ('Bravo', 1, 'Finalizado'),
+    -> ('Bravo', 2, 'Finalizado'),
+    -> ('Charlie', 1, 'Corriendo'),
+    -> ('Charlie', 2, 'Corriendo'),
+    -> ('Delta', 1, 'Error'),
+    -> ('Delta', 2, 'Error'),
+    -> ('Echo', 1, 'Corriendo'),
+    -> ('Echo', 2, 'Finalizado');
+Query OK, 11 rows affected (0.01 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+mysql> SELECT Flujo,
+    ->        CASE 
+    ->            WHEN COUNT(DISTINCT Estado) = 1 THEN MAX(Estado)
+    ->            WHEN SUM(CASE WHEN Estado = 'Error' THEN 1 ELSE 0 END) > 0 
+    ->                 AND SUM(CASE WHEN Estado IN ('Finalizado', 'Corriendo') THEN 1 ELSE 0 END) > 0 
+    ->                 THEN 'Indeterminado'
+    ->            ELSE 'Corriendo'
+    ->        END AS Estado_General
+    -> FROM procesos
+    -> GROUP BY Flujo;
++---------+----------------+
+| Flujo   | Estado_General |
++---------+----------------+
+| Alpha   | Indeterminado  |
+| Bravo   | Finalizado     |
+| Charlie | Corriendo      |
+| Delta   | Error          |
+| Echo    | Corriendo      |
++---------+----------------+
+5 rows in set (0.00 sec)
+mysql> CREATE TABLE sintaxis (
+    ->     Secuencia INT PRIMARY KEY,
+    ->     Texto VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+mysql> INSERT INTO sintaxis (Secuencia, Texto) VALUES 
+    -> (1, 'SELECT'),
+    -> (2, 'Producto,'),
+    -> (3, 'Precio'),
+    -> (4, 'Disponibilidad,'),
+    -> (5, 'FROM'),
+    -> (6, 'Productos'),
+    -> (7, 'WHERE'),
+    -> (8, 'Precio'),
+    -> (9, '>100');
+Query OK, 9 rows affected (0.00 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+mysql> SELECT GROUP_CONCAT(Texto ORDER BY Secuencia SEPARATOR ' ') AS Sintaxis_Completa
+    -> FROM sintaxis;
++--------------------------------------------------------------------------+
+| Sintaxis_Completa                                                        |
++--------------------------------------------------------------------------+
+| SELECT Producto, Precio Disponibilidad, FROM Productos WHERE Precio >100 |
++--------------------------------------------------------------------------+
+1 row in set (0.01 sec)
+mysql> CREATE TABLE puntuaciones (
+    ->     Jugador_A INT,
+    ->     Jugador_B INT,
+    ->     Marcador INT
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+mysql> INSERT INTO puntuaciones (Jugador_A, Jugador_B, Marcador) VALUES 
+    -> (1001, 2002, 150),
+    -> (3003, 4004, 15),
+    -> (4004, 3003, 125);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+mysql> SELECT LEAST(Jugador_A, Jugador_B) AS Jugador_A,
+    ->        GREATEST(Jugador_A, Jugador_B) AS Jugador_B,
+    ->        SUM(Marcador) AS Marcador
+    -> FROM puntuaciones
+    -> GROUP BY LEAST(Jugador_A, Jugador_B), GREATEST(Jugador_A, Jugador_B);
++-----------+-----------+----------------+
+| Jugador_A | Jugador_B | Marcador       |
++-----------+-----------+----------------+
+|      1001 |      2002 |            150 |
+|      3003 |      4004 |            140 |
++-----------+-----------+----------------+
+2 rows in set (0.00 sec)
+mysql> 
